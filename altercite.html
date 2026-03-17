@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Le parking ferme — et c'est une aventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,800;0,900;1,700;1,900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:    #01018f;
+  --navy-d:  #010170;
+  --navy-l:  #e8e8fc;
+  --orange:  #ff4701;
+  --orange-d:#d93c00;
+  --orange-l:#fff0eb;
+  --white:   #ffffff;
+  --cream:   #fafaf7;
+  --gray:    #f2f2f0;
+  --text:    #0f0f2e;
+  --text2:   #4a4a6a;
+  --text3:   #9898b8;
+  --border:  rgba(1,1,143,.1);
+  --r:       10px;
+  --r-lg:    16px;
+  --r-xl:    22px;
+  --font:    'Montserrat', system-ui, sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--cream);color:var(--text);min-height:100vh}
+
+/* ── HERO ── */
+.hero{
+  background:var(--navy);
+  color:var(--white);
+  padding:3rem 1.5rem 2.5rem;
+  position:relative;
+  overflow:hidden;
+}
+/* motif pointillé */
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(circle, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;
+}
+/* grand rond décoratif */
+.hero::after{
+  content:'';
+  position:absolute;
+  right:-80px;bottom:-80px;
+  width:300px;height:300px;
+  border-radius:50%;
+  border:2px solid rgba(255,71,1,.25);
+  pointer-events:none;
+}
+.hero-inner{max-width:680px;margin:0 auto;position:relative;z-index:1}
+
+.defi-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);
+  color:white;
+  border-radius:40px;
+  padding:5px 16px;
+  font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:1.25rem;
+}
+
+.hero-title{
+  font-size:clamp(2.2rem,7vw,3.8rem);
+  font-weight:900;
+  line-height:1.0;
+  letter-spacing:-.04em;
+  margin-bottom:1rem;
+  text-transform:uppercase;
+}
+.hero-title .accent{color:var(--orange)}
+.hero-title em{font-style:italic;font-weight:700;color:rgba(255,255,255,.6);text-transform:none;letter-spacing:-.02em}
+
+.hero-sub{
+  font-size:15px;font-weight:400;
+  color:rgba(255,255,255,.8);
+  line-height:1.75;
+  max-width:520px;
+  margin-bottom:2rem;
+}
+.hero-sub strong{color:white;font-weight:700}
+
+/* COMPTEUR */
+.counter-wrap{
+  display:inline-flex;align-items:center;gap:1rem;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--r-lg);
+  padding:.85rem 1.25rem;
+  margin-bottom:2rem;
+}
+.counter-num{
+  font-size:3rem;font-weight:900;
+  color:var(--orange);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.counter-text{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);line-height:1.4}
+.counter-text span{display:block;font-size:11px;font-weight:400;opacity:.7;margin-top:2px}
+
+.hero-anchors{display:flex;flex-wrap:wrap;gap:8px}
+.anchor-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:40px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  font-size:12px;font-weight:700;
+  color:white;text-decoration:none;
+  transition:all .2s;letter-spacing:.02em;
+}
+.anchor-pill:hover{background:rgba(255,255,255,.2)}
+.anchor-pill.orange-pill{background:var(--orange);border-color:transparent}
+.anchor-pill.orange-pill:hover{background:var(--orange-d)}
+
+/* ── MAIN ── */
+.main{max-width:720px;margin:0 auto;padding:2.5rem 1rem 5rem}
+
+/* ── SECTION ── */
+.section{margin-bottom:3rem;opacity:1;transform:none}
+.section.anim{opacity:0;transform:translateY(14px);transition:opacity .45s ease,transform .45s ease}
+.section.anim.vis{opacity:1;transform:none}
+
+.sec-head{margin-bottom:1.1rem}
+.sec-num{
+  font-size:10px;font-weight:800;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--orange);
+  display:block;margin-bottom:4px;
+}
+.sec-title{
+  font-size:1.4rem;font-weight:900;letter-spacing:-.03em;
+  text-transform:uppercase;color:var(--navy);
+}
+
+/* ── CARDS ── */
+.card{
+  background:var(--white);
+  border-radius:var(--r-lg);
+  border:1.5px solid var(--border);
+  margin-bottom:.75rem;
+  overflow:hidden;
+  transition:transform .18s,box-shadow .18s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(1,1,143,.1)}
+.card.static:hover{transform:none;box-shadow:none}
+.card-body{padding:1.25rem 1.5rem}
+.card-row{display:flex;align-items:flex-start;gap:1rem}
+.ico{
+  width:46px;height:46px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.card-content{flex:1;min-width:0}
+.ctitle{font-size:15px;font-weight:800;letter-spacing:-.01em;margin-bottom:4px;color:var(--text)}
+.cdesc{font-size:13px;color:var(--text2);line-height:1.65;font-weight:400}
+.cfoot{
+  padding:.7rem 1.5rem;
+  background:var(--gray);
+  border-top:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  gap:.75rem;flex-wrap:wrap;
+}
+.cfoot-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase}
+
+/* highlighted card */
+.card-hl .card-body{background:var(--navy-l)}
+.card-hl{border-color:rgba(1,1,143,.2)}
+
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.65rem}
+.chip{
+  font-size:11px;font-weight:700;
+  padding:3px 11px;border-radius:20px;
+  letter-spacing:.03em;
+}
+.ch-navy  {background:var(--navy-l);color:var(--navy)}
+.ch-orange{background:var(--orange-l);color:var(--orange-d)}
+.ch-white {background:var(--gray);color:var(--text2)}
+
+/* ── BOUTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 20px;border-radius:40px;
+  font-size:12px;font-weight:800;font-family:var(--font);
+  cursor:pointer;text-decoration:none;border:none;
+  transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
+}
+.btn-orange{background:var(--orange);color:white}
+.btn-orange:hover{background:var(--orange-d)}
+.btn-navy{background:var(--navy);color:white}
+.btn-navy:hover{background:var(--navy-d)}
+.btn-outline{
+  background:transparent;
+  border:1.5px solid var(--border);
+  color:var(--text2);text-transform:none;letter-spacing:0;font-weight:700
+}
+.btn-outline:hover{background:var(--gray)}
+.btn-sm{padding:6px 14px;font-size:11px}
+
+/* ── BUS CARD ── */
+.bus-hero{
+  background:var(--navy);
+  border-radius:var(--r-xl);
+  padding:1.75rem;
+  color:white;
+  margin-bottom:.75rem;
+  position:relative;
+  overflow:hidden;
+  border:none;
+}
+.bus-hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(circle, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size:22px 22px;
+  pointer-events:none;
+}
+.bus-hero::after{
+  content:'🚌';
+  position:absolute;right:1.5rem;top:1.2rem;
+  font-size:72px;opacity:.1;pointer-events:none;
+}
+.bus-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--orange);
+  border-radius:40px;padding:4px 14px;
+  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:.85rem;
+}
+.bus-title{font-size:1.3rem;font-weight:900;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:.5rem;line-height:1.15}
+.bus-desc{font-size:13px;opacity:.85;line-height:1.7;margin-bottom:1.1rem;max-width:520px;font-weight:400}
+.bus-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem}
+.bpill{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--r);
+  padding:6px 12px;font-size:12px;font-weight:700;
+}
+
+/* ── CAFÉ ── */
+.cafe-card{
+  background:#fff8f5;
+  border-radius:var(--r-lg);
+  border:1.5px solid rgba(255,71,1,.15);
+  padding:1.25rem 1.5rem;
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:.75rem;
+}
+.cafe-emoji{font-size:36px;flex-shrink:0}
+.cafe-title{font-size:14px;font-weight:800;letter-spacing:-.01em;margin-bottom:3px;color:var(--navy)}
+.cafe-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ── PARKING ── */
+.parking-box{
+  background:var(--gray);
+  border-radius:var(--r-lg);
+  padding:1.5rem;
+  border:1.5px solid var(--border);
+}
+.parking-title{font-size:1.1rem;font-weight:900;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:.5rem;color:var(--navy)}
+.parking-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.travaux-notice{
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--orange-l);border-radius:var(--r);
+  padding:.85rem 1rem;font-size:13px;
+  color:var(--orange-d);line-height:1.5;font-weight:700;
+  margin-bottom:1rem;
+  border:1px solid rgba(255,71,1,.2);
+}
+
+/* ── FEEDBACK ── */
+.fb-box{
+  background:var(--navy);
+  border-radius:var(--r-xl);
+  padding:1.75rem;
+  color:white;
+}
+.fb-box::before{
+  content:'';display:block;
+}
+.fb-title{font-size:1.2rem;font-weight:900;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:.35rem}
+.fb-sub{font-size:13px;opacity:.8;margin-bottom:1.1rem;line-height:1.65;font-weight:400}
+.sugs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem}
+.sug{
+  font-size:12px;font-weight:700;font-family:var(--font);
+  padding:7px 15px;border-radius:40px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.85);
+  cursor:pointer;transition:all .18s;
+  letter-spacing:.02em;
+}
+.sug:hover{background:rgba(255,255,255,.2);color:white}
+.sug.on{background:var(--orange);border-color:transparent;color:white}
+textarea.free{
+  width:100%;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r);
+  padding:.85rem 1rem;font-size:14px;font-family:var(--font);font-weight:400;
+  color:white;background:rgba(255,255,255,.08);
+  outline:none;resize:vertical;min-height:90px;line-height:1.6;
+  transition:border-color .18s;
+}
+textarea.free::placeholder{color:rgba(255,255,255,.4)}
+textarea.free:focus{border-color:var(--orange);background:rgba(255,255,255,.11)}
+.fb-actions{display:flex;align-items:center;justify-content:flex-end;margin-top:.85rem;gap:.75rem}
+.merci{font-size:13px;font-weight:800;color:var(--orange);display:none;letter-spacing:.02em}
+
+/* ── DIVIDER ── */
+.divider{height:1.5px;background:var(--border);margin:2rem 0}
+
+/* ── ANIM ── */
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hero-inner>*{animation:up .55s ease both}
+.defi-tag{animation-delay:.04s}
+.hero-title{animation-delay:.1s}
+.hero-sub{animation-delay:.18s}
+.counter-wrap{animation-delay:.24s}
+.hero-anchors{animation-delay:.3s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .card-row{flex-direction:column}
+  .cafe-card{flex-direction:column}
+  .bus-pills{flex-direction:column}
+  .counter-wrap{flex-direction:column;gap:.5rem;text-align:center}
+  .counter-num{font-size:2.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="defi-tag">🏁 Défi mobilité — Altercité</div>
+    <h1 class="hero-title">
+      Le parking<br>
+      <span class="accent">ferme</span><br>
+      <em>et c'est l'occasion d'un défi.</em>
+    </h1>
+    <p class="hero-sub">
+      Début avril, le parking est en travaux pour <strong>un moment</strong>. L'occasion idéale de tester autre chose — le soleil revient, les pistes cyclables aussi. On vous a préparé toutes les options.
+    </p>
+
+    <!-- COMPTEUR -->
+    <div class="counter-wrap" id="counter-wrap">
+      <div>
+        <div class="counter-num" id="counter-days">15</div>
+      </div>
+      <div class="counter-text">
+        jours pour trouver<br>votre alternative préférée
+        <span id="counter-sub">Fermeture le 1er avril — à vous de jouer !</span>
+      </div>
+    </div>
+
+    <nav class="hero-anchors">
+      <a class="anchor-pill orange-pill" href="#velo">🚲 À vélo</a>
+      <a class="anchor-pill" href="#bus">🚌 Bus & tram</a>
+      <a class="anchor-pill" href="#partage">🚗 Mobilité partagée</a>
+    </nav>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- ══ 01 — VÉLO ══ -->
+  <section class="section" id="velo">
+    <div class="sec-head">
+      <span class="sec-num">01 — Le grand favori</span>
+      <h2 class="sec-title">En vélo, c'est le printemps</h2>
+    </div>
+
+    <div class="card card-hl">
+      <div class="card-body">
+        <div class="card-row">
+          <div class="ico" style="background:var(--navy);color:white">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="17" r="4" stroke="white" stroke-width="1.8" fill="none"/>
+              <circle cx="18" cy="17" r="4" stroke="white" stroke-width="1.8" fill="none"/>
+              <path d="M6 17L10 8L13 13L15.5 9.5L18 17" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <circle cx="13.5" cy="6.5" r="1.8" fill="white"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="ctitle">Calculez votre itinéraire — Geovelo</div>
+            <div class="cdesc">Le GPS dédié aux cyclistes. Pistes, bandes, chemins agréables — il connaît les raccourcis que vous ne connaissez pas encore.</div>
+            <div style="margin-top:.85rem">
+              <a href="https://geovelo.app/fr/route/?bike-type=own&c=3.143514%2C50.668779&e-bike=false&to=3.143514%2C50.668779&z=15.00" target="_blank" class="btn btn-navy">Ouvrir Geovelo →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card static">
+      <div class="card-body">
+        <div class="card-row">
+          <div class="ico" style="background:var(--navy-l)">🔒</div>
+          <div class="card-content">
+            <div class="ctitle">Espace vélo sécurisé sur place</div>
+            <div class="cdesc">Arceaux couverts et abrités dès l'arrivée. Vestiaire, douche, kit de réparation — tout pour commencer la journée sans stress.</div>
+            <div class="chips">
+              <span class="chip ch-navy">🔒 Arceaux sécurisés</span>
+              <span class="chip ch-navy">🚿 Vestiaire & douche</span>
+              <span class="chip ch-navy">🔧 Kit de réparation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="card-row">
+          <div class="ico" style="background:#fff4e8">🌊</div>
+          <div class="card-content">
+            <div class="ctitle">Un vélo à emprunter — et la balade canal</div>
+            <div class="cdesc">Pas de vélo ? On peut peut-être vous en prêter un. Et si vous avez envie de découvrir le canal après le boulot, quelqu'un ici sera ravi de vous accompagner.</div>
+            <div style="margin-top:.85rem">
+              <a href="#idee" class="btn btn-outline btn-sm">A demander au bar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card static">
+      <div class="card-body" style="padding:1rem 1.5rem">
+        <div class="card-row" style="align-items:center">
+          <div style="font-size:24px;flex-shrink:0">🛴</div>
+          <div class="card-content">
+            <div class="ctitle" style="font-size:13px">Trottinettes</div>
+            <div class="cdesc">Interdites à l'intérieur. Un espace sécurisé est disponible à l'extérieur — pas la rue.</div>
+          </div>
+          <span class="chip ch-white" style="flex-shrink:0">Espace dédié</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 02 — BUS ══ -->
+  <section class="section" id="bus">
+    <div class="sec-head">
+      <span class="sec-num">02 — Sans conduire, sans chercher à se garer</span>
+      <h2 class="sec-title">Le bus 32, un voiturier avec sourire</h2>
+    </div>
+
+    <div class="card bus-hero">
+      <div style="position:relative;z-index:1">
+        <div class="bus-badge">🚌 Arrêt devant l'entrée</div>
+        <div class="bus-title">Toutes les 15 à 25 min,<br>accessible PMR</div>
+        <div class="bus-desc">Il s'arrête directement devant l'espace. Pas de marche, pas de correspondance complexe. Il connecte au tram et au métro en 10 minutes — et à la station d'autopartage Citiz si l'envie du grand voyage s'impose.</div>
+        <div class="bus-pills">
+          <div class="bpill">⏱ 15–25 min</div>
+          <div class="bpill">♿ Accessible PMR</div>
+          <div class="bpill">🚇 Tram & métro 10 min</div>
+        </div>
+        <a href="https://transitapp.com" target="_blank" class="btn btn-orange">Suivre en direct — Transit app →</a>
+      </div>
+    </div>
+
+    <div class="cafe-card">
+      <div class="cafe-emoji">☕</div>
+      <div>
+        <div class="cafe-title">Transit dit quand il arrive — prenez un café en attendant</div>
+        <div class="cafe-desc">Vous savez à la minute près. Plus besoin de guetter. Profitez-en pour souffler, croiser quelqu'un, ou finir ce message.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 03 — MOBILITÉ PARTAGÉE ══ -->
+  <section class="section" id="partage">
+    <div class="sec-head">
+      <span class="sec-num">03 — Le bon véhicule au bon moment</span>
+      <h2 class="sec-title">Mobilité partagée sur place</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="card-row">
+          <div class="ico" style="background:var(--navy-l)">⚡</div>
+          <div class="card-content">
+            <div class="ctitle">Zoé partagée</div>
+            <div class="cdesc">Un rendez-vous, une livraison, une course ? La Zoé électrique est disponible pour les usagers de l'espace — sur réservation.</div>
+            <div class="chips">
+              <span class="chip ch-navy">🔋 Électrique</span>
+              <span class="chip ch-navy">📅 Sur réservation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-row">
+          <div class="ico" style="background:var(--orange-l)">📦</div>
+          <div class="card-content">
+            <div class="ctitle">Livraison cargo vélo — mutualisée</div>
+            <div class="cdesc">Petits transports, livraisons locales — sans voiture. Partagé entre usagers, commerces et coworkers de l'espace.</div>
+            <div class="chips">
+              <span class="chip ch-orange">🚲 Cargo vélo</span>
+              <span class="chip ch-orange">🤝 Mutualisé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card static">
+      <div class="card-body" style="padding:1rem 1.5rem">
+        <div class="card-row" style="align-items:center">
+          <div class="ico" style="background:var(--navy-l)">🚲</div>
+          <div class="card-content">
+            <div class="ctitle" style="font-size:14px">Vélos partagés sur place</div>
+            <div class="cdesc">Pour rejoindre un arrêt, faire une course ou explorer le quartier. Disponibles à l'accueil.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ 04 — CHAMP LIBRE ══ -->
+  <section class="section" id="idee">
+    <div class="sec-head">
+      <span class="sec-num">04 — On construit ça ensemble</span>
+      <h2 class="sec-title">Un besoin, une idée ?</h2>
+    </div>
+
+    <div class="fb-box">
+      <div class="fb-title">Dites-le nous</div>
+      <div class="fb-sub">Un service manquant, une envie de vous impliquer, une question ? Vos retours façonnent directement ce qu'on propose ici.</div>
+
+      <div class="sugs" id="sug-list">
+        <button class="sug" onclick="tog(this)">Faire laver mon vélo</button>
+        <button class="sug" onclick="tog(this)">Faire réparer mon vélo</button>
+        <button class="sug" onclick="tog(this)">Emprunter un vélo</button>
+        <button class="sug" onclick="tog(this)">Balade le long du canal</button>
+        <button class="sug" onclick="tog(this)">Réserver la Zoé</button>
+        <button class="sug" onclick="tog(this)">Être alerté à la réouverture du parking</button>
+        <button class="sug" onclick="tog(this)">Autre chose…</button>
+      </div>
+
+      <textarea class="free" id="fb-text" placeholder="Décrivez librement votre idée ou besoin…"></textarea>
+
+      <div class="fb-actions">
+        <span class="merci" id="merci">✅ Reçu — merci !</span>
+        <button class="btn btn-orange" onclick="send()">Envoyer →</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ── Scroll reveal (content always visible as fallback — no opacity:0 default)
+try {
+  const io = new IntersectionObserver(entries =>
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
+    { threshold: 0, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.section').forEach(s => { s.classList.add('anim'); io.observe(s); });
+  setTimeout(() => {
+    document.querySelectorAll('.section.anim:not(.vis)').forEach(s => s.classList.add('vis'));
+  }, 600);
+} catch(e) { /* observer not available — sections already visible */ }
+
+// ── Compteur
+(function() {
+  const target = new Date('2025-04-01T00:00:00');
+  const now = new Date();
+  let days = Math.ceil((target - now) / 86400000);
+  if (days < 0) days = 0;
+  const el = document.getElementById('counter-days');
+  const sub = document.getElementById('counter-sub');
+  if (days === 0) {
+    el.textContent = '🎉';
+    sub.textContent = 'C'est parti — bonne aventure !';
+  } else {
+    el.textContent = days;
+    sub.textContent = 'Fermeture le 1er avril — à vous de jouer !';
+  }
+})();
+
+// ── Suggestions
+function tog(el) {
+  el.classList.toggle('on');
+  const picked = [...document.querySelectorAll('.sug.on')].map(s => s.textContent).join('\n');
+  const ta = document.getElementById('fb-text');
+  if (!ta.dataset.m) ta.value = picked;
+}
+document.getElementById('fb-text').addEventListener('input', function() { this.dataset.m = '1'; });
+
+function send() {
+  const val = document.getElementById('fb-text').value.trim();
+  const picked = document.querySelector('.sug.on');
+  if (!val && !picked) return;
+  document.getElementById('fb-text').value = '';
+  delete document.getElementById('fb-text').dataset.m;
+  document.querySelectorAll('.sug.on').forEach(s => s.classList.remove('on'));
+  const m = document.getElementById('merci');
+  m.style.display = 'block';
+  setTimeout(() => { m.style.display = 'none'; }, 4000);
+}
+</script>
+</body>
+</html>
